@@ -52,8 +52,8 @@ sum(nums...)        // or spread a slice
 
 ## Done when
 
-- [ ] Students and scores stored in a map
-- [ ] Class average calculated
+- [ x ] Students and scores stored in a map
+- [ x ] Class average calculated
 - [ ] Highest scorer found
 - [ ] Grade list printed in sorted order
 - [ ] Input handled from stdin
