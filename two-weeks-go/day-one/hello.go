@@ -27,7 +27,75 @@ const (
 	C     = "MY CONSTANT"
 )
 
+func printHelloTextFile() {
+	/* READ FROM TEXT FILE */
+	file, err := os.Open("hello.txt")
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	/* Read Lines */
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Print(err)
+	}
+}
+
+func printTextFile(fileName string) {
+	file, err := os.Open(fileName)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	/* Read Lines */
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Print(err)
+	}
+}
+
+/* No named Returns */
+func a(x int, y int) int {
+	return x + y
+}
+
+/* Single Returns */
+func add(x int, y int) (result int) {
+	result = x + y
+	return
+}
+
+/* Multiple Returns */
+func getUserFullName() (firstName string, lastName string) {
+	firstName = "Cody"
+	lastName = "The Breeze"
+	return
+}
+
 func main() {
+
+	printHelloTextFile()
+	printTextFile("invalid.txt")
+	printTextFile("hello.txt")
+
+	fmt.Println(add(100, 211))
+	f, l := getUserFullName()
+
+	fmt.Println(f, l)
 
 	/* Variable declaration */
 	var a string = "Hello World"
