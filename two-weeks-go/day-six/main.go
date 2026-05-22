@@ -13,7 +13,7 @@ import (
 func convertInputToId(input string) int {
 	id, err := strconv.Atoi(input)
 	if err != nil {
-		fmt.Println("error: ", err)
+		fmt.Println("error: id must be a number")
 		return -1
 	}
 	return id
@@ -63,6 +63,7 @@ func main() {
 		}
 	case "list":
 		models.ListTasks(taskList)
+		return
 	default:
 		fmt.Println("invalid operation")
 	}

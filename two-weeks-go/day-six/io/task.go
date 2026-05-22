@@ -13,6 +13,11 @@ func LoadTasks(filename string) (models.TaskList, error) {
 	if err != nil {
 		return models.TaskList{}, fmt.Errorf("issue loading file %w", err)
 	}
+
+	if len(data) == 0 {
+		return models.TaskList{Tasks: []models.Task{}}, nil
+	}
+
 	var t []models.Task
 	err = json.Unmarshal(data, &t)
 	if err != nil {
