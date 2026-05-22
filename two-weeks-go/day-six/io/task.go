@@ -11,12 +11,12 @@ import (
 func LoadTasks(filename string) (models.TaskList, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return models.TaskList{}, fmt.Errorf("issue loading file %f", err)
+		return models.TaskList{}, fmt.Errorf("issue loading file %w", err)
 	}
 	var t []models.Task
 	err = json.Unmarshal(data, &t)
 	if err != nil {
-		return models.TaskList{}, fmt.Errorf("issue parsing file %f", err)
+		return models.TaskList{}, fmt.Errorf("issue parsing file %w", err)
 	}
 	return models.TaskList{Tasks: t}, nil
 }

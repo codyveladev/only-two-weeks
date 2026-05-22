@@ -6,8 +6,18 @@ type TaskList struct {
 	Tasks []Task
 }
 
+func getNextId(taskList TaskList) int {
+	max := 0
+	for _, t := range taskList.Tasks {
+		if t.ID > max {
+			max = t.ID
+		}
+	}
+	return max + 1
+}
+
 func AddTask(taskList TaskList, title string) TaskList {
-	newTask := NewTask(len(taskList.Tasks)+1, title)
+	newTask := NewTask(getNextId(taskList), title)
 	taskList.Tasks = append(taskList.Tasks, newTask)
 	return taskList
 }
