@@ -195,6 +195,50 @@ func TestDeleteTask(t *testing.T) {
 	}
 }
 
+func TestFindTaskIndexById(t *testing.T) {
+	tests := []struct {
+		name          string
+		taskList      TaskList
+		id            int
+		expectedIndex int
+		returnsError  bool
+	}{
+		{
+			name: "task found returns correct index",
+			taskList: TaskList{Tasks: []Task{
+				{ID: 1, Title: "Buy Milk"},
+				{ID: 2, Title: "Get Oil Change"},
+				{ID: 3, Title: "Dentist Appt"},
+			}},
+			id:            2,
+			expectedIndex: 1,
+			returnsError:  false,
+		},
+		{
+			name: "task not found returns error",
+			taskList: TaskList{Tasks: []Task{
+				{ID: 1, Title: "Buy Milk"},
+			}},
+			id:            99,
+			expectedIndex: -1,
+			returnsError:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := findTaskIndexById(tt.taskList, tt.id)
+			if (err != nil) != tt.returnsError {
+				t.Errorf("unexpected error: %v", err)
+				return
+			}
+			if got != tt.expectedIndex {
+				t.Errorf("got index %d, expected %d", got, tt.expectedIndex)
+			}
+		})
+	}
+}
+
 func BenchmarkGetNextId(b *testing.B) {
 	taskList := TaskList{}
 
