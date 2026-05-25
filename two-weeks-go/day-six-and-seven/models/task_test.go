@@ -18,3 +18,30 @@ func TestNewTask(t *testing.T) {
 	}
 
 }
+
+func TestCompleteTask(t *testing.T) {
+	tests := []struct {
+		name     string
+		task     Task
+		wantDone bool
+	}{
+		{
+			name:     "marks incomplete task as done",
+			task:     NewTask(1, "Buy Milk"),
+			wantDone: true,
+		},
+		{
+			name:     "already done task stays done",
+			task:     Task{ID: 2, Completed: true},
+			wantDone: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.task.Complete()
+			if tt.task.Completed != tt.wantDone {
+				t.Errorf("got %v, want %v", tt.task.Completed, tt.wantDone)
+			}
+		})
+	}
+}
