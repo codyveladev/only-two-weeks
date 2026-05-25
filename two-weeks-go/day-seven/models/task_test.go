@@ -17,6 +17,10 @@ func TestNewTask(t *testing.T) {
 		t.Errorf("expected new task to not be completed")
 	}
 
+	if task.CreatedAt == "" {
+		t.Errorf("expected CreatedAt to be set, got empty string")
+	}
+
 }
 
 func TestCompleteTask(t *testing.T) {
