@@ -14,7 +14,7 @@ import (
 func main() {
 	var wg sync.WaitGroup
 	c := models.NewCache()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 100; i++ {
 		wg.Add(1)
 		go func(id int) {
 			defer wg.Done()
@@ -29,4 +29,6 @@ func main() {
 			}
 		}(i)
 	}
+	wg.Wait()
+	fmt.Println("done")
 }
