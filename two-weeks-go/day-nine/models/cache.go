@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -41,7 +40,6 @@ func NewCache() *Cache {
 func (c *Cache) Set(key string, value string, ttl time.Duration) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	fmt.Println("set key: ", key)
 	c.data[key] = entry{
 		Value:     value,
 		ExpiresAt: time.Now().Add(ttl),
@@ -54,10 +52,8 @@ func (c *Cache) Get(key string) (string, bool) {
 	defer c.mu.RUnlock()
 	ret, ok := c.data[key]
 	if ok && ret.ExpiresAt.After(time.Now()) {
-		fmt.Printf("return key value: [%s]:%s\n", key, ret.Value)
 		return ret.Value, true
 	}
-	fmt.Printf("return key %s: not found\n", key)
 	return "", false
 
 }
@@ -66,5 +62,4 @@ func (c *Cache) Delete(key string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	delete(c.data, key)
-	fmt.Printf("key deleted: %s\n", key)
 }

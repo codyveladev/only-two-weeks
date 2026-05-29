@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
-
-	//"sync"
 	"time"
 
 	"github.com/codyveladev/day-nine/models"
