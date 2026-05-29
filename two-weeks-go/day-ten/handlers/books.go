@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"sync"
 
@@ -10,7 +9,7 @@ import (
 )
 
 var (
-	booksMu sync.Mutex
+	booksMu sync.RWMutex
 	books   = []models.Book{
 		{ID: 1, Title: "The Go Programming Language", Author: "Cody"},
 		{ID: 2, Title: "Learn Go", Author: "Dave"},
@@ -19,13 +18,9 @@ var (
 )
 
 func listBooks(w http.ResponseWriter, r *http.Request) {
-	booksMu.Lock()
-	defer booksMu.Unlock()
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(books)
-}
-
-func listBooksByAuthor(w http.ResponseWriter, r *http.Request, author string) {
+	booksMu.RLock()
+	defer booksMu.RUnlock()
+	author := r.URL.Query().Get("author")
 	filtered := []models.Book{}
 	for _, b := range books {
 		if author == "" || b.Author == author {
@@ -57,12 +52,6 @@ func createBook(w http.ResponseWriter, r *http.Request) {
 func HandleBooks(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		author := r.URL.Query().Get("author")
-		fmt.Println(author)
-		if author != "" {
-			listBooksByAuthor(w, r, author)
-			return
-		}
 		listBooks(w, r)
 	case http.MethodPost:
 		createBook(w, r)
