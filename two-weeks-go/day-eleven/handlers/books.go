@@ -74,6 +74,10 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
 
 	var newBook models.Book
 	if err := json.NewDecoder(r.Body).Decode(&newBook); err != nil {
@@ -83,23 +87,16 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 
 	booksMu.Lock()
 	defer booksMu.Unlock()
-	if err != nil {
-		http.Error(w, "invalid id", http.StatusBadRequest)
-	}
 	for i, book := range books {
 		if book.ID == id {
-			books[i] = models.Book{
-				ID:     id,
-				Title:  newBook.Title,
-				Author: newBook.Author,
-			}
-			newBook = books[i]
+			books[i] = models.Book{ID: id, Title: newBook.Title, Author: newBook.Author}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(books[i])
+			return
 		}
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newBook)
-
+	http.Error(w, "book not found", http.StatusNotFound)
 }
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
